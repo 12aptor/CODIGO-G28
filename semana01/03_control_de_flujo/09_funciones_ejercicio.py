@@ -4,9 +4,6 @@ programa debe pedir la longitud de la contraseña"""
 
 import string
 import random
-import test
-
-print(__name__)
 
 def generar_contrasena(longitud):
     caracteres = string.ascii_letters + string.digits + string.punctuation
