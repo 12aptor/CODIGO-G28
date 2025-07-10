@@ -34,3 +34,23 @@ honda.encender()
 mitsubishi = Vehiculo("verde", "Mitsubishi", "Eclipse")
 print(mitsubishi.marca)
 mitsubishi.encender()
+
+
+""" Herencia """
+class Pickup(Vehiculo):
+    def mostrar_marca(self):
+        print(self.marca)
+
+ford = Pickup("rojo", "Ford", "F150")
+print(ford.marca)
+
+""" Polimorfismo """
+toyota = Pickup(color="rojo", marca="Toyota", modelo="Hilux")
+
+def mostrar_marca(pickup):
+    pickup.mostrar_marca()
+
+mostrar_marca(toyota)
+
+""" Abstracción: Consiste en enfocarse en los aspectos esenciales
+de un objeto ignorando los detalles irrelevantes para su uso """
