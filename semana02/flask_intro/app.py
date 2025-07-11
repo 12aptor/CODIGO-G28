@@ -17,8 +17,15 @@ def hello(name):
 @app.route('/login', methods=['POST']) # GET, POST, PUT, DELETE, PATCH
 def login():
     if request.method == 'POST':
-        return 'Login'
-    
+        json = request.get_json()
+        return json
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['image']
+    print(file)
+    return 'Uploaded!'
+
 @app.route('/client', methods=['GET'])
 def client():
     return {
