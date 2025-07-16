@@ -95,3 +95,55 @@ SELECT * FROM movies WHERE id = 1;
 
 - **ASC**: Ordenar de forma ascendente.
 - **DESC**: Ordenar de forma descendente.
+
+## Limitar resultados
+
+- **LIMIT**: Limitar cantidad de resultados.
+    ```sql
+    SELECT * FROM movies LIMIT 5;
+    ```
+
+- **OFFSET**: Desplazar resultados.
+    ```sql
+    SELECT * FROM movies LIMIT 5 OFFSET 5;
+    ```
+
+## Operadores AND, OR y NOT
+
+- **AND**: Operador lógico Y.
+    ```sql
+    SELECT * FROM movies WHERE year >= 2000 AND year <= 2010;
+    ```
+
+- **OR**: Operador lógico O.
+    ```sql
+    SELECT * FROM movies WHERE year = 2003 OR year = 2010;
+    ```
+
+- **NOT**: Operador lógico NOT.
+    ```sql
+    SELECT * FROM movies WHERE NOT YEAR = 2003;
+    ```
+
+## Operador UPDATE
+
+- **UPDATE**: Actualizar registros.
+    ```sql
+    UPDATE movies SET year = 2020 WHERE id = 1;
+    ```
+
+## Operador DELETE
+
+- **DELETE**: Eliminar registros.
+    ```sql
+    DELETE FROM movies WHERE id = 1;
+    ```
+
+## Operador JOIN
+
+- **JOIN**: Unir tablas.
+    ```sql
+    SELECT title, domestic_sales
+    FROM movies
+    JOIN boxoffice ON movies.id = boxoffice.movie_id;
+    ```
