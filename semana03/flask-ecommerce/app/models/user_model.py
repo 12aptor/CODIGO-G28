@@ -16,7 +16,7 @@ class UserModel(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    email = Column(String(200), nullable=False)
+    email = Column(String(200), nullable=False, unique=True)
     password = Column(Text, nullable=False)
     status = Column(Boolean, default=True)
     created_at = Column(DateTime, default=func.now())

@@ -17,7 +17,7 @@ class ProductModel(db.Model):
     code = Column(String(6), nullable=False) # C-0001
     description = Column(String(250), nullable=False)
     image = Column(Text)
-    brand = Column(String(50), nullabe=False)
+    brand = Column(String(50), nullable=False)
     size = Column(String(10), nullable=False)
     price = Column(Float, nullable=False)
     stock = Column(Integer, nullable=False)
