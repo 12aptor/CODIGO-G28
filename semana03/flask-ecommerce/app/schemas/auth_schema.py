@@ -6,3 +6,7 @@ class RegisterSchema(BaseModel):
     email: EmailStr
     password: str
     role_id: int
+
+class LoginSchema(BaseModel):
+    email: EmailStr
+    password: str
