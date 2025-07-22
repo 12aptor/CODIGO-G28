@@ -40,21 +40,26 @@ create_user_table()
 def users():
     method = request.method
     if method == 'GET':
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users;')
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM users;')
 
-        users_list = [] 
-        for row in cursor.fetchall():
-            user = {
-                'id': row[0],
-                'name': row[1],
-                'email': row[2],
-                'created_at': str(row[3])
-            }
-            users_list.append(user)
+            users_list = [] 
+            for row in cursor.fetchall():
+                user = {
+                    'id': row[0],
+                    'name': row[1],
+                    'email': row[2],
+                    'created_at': str(row[3])
+                }
+                users_list.append(user)
 
-        return jsonify(users_list), 200
+            return jsonify(users_list), 200
+        except Exception as e:
+            return jsonify({
+                'error': str(e)
+            }), 500
     elif method == 'POST':
         try:
             json = request.get_json()

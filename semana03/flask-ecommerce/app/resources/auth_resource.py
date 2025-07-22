@@ -2,6 +2,7 @@ from app.models.user_model import UserModel
 from flask_restful import Resource, request
 from app.schemas.auth_schema import RegisterSchema
 from pydantic import ValidationError
+from db import db
 
 class RegisterResource(Resource):
     def post(self):
@@ -9,7 +10,9 @@ class RegisterResource(Resource):
             data = request.get_json()
             validated_data = RegisterSchema(**data)
 
-            existing_user = UserModel.query.filter_by(email=validated_data.email).first()
+            existing_user = UserModel.query.filter_by(
+                email=validated_data.email
+            ).first()
             if existing_user:
                 raise Exception('El correo ya esta en uso')
 
@@ -20,7 +23,12 @@ class RegisterResource(Resource):
                 password=validated_data.password,
                 role_id=validated_data.role_id
             )
-        
+            db.session.add(user)
+            db.session.commit()
+
+            return {
+                'ok': True
+            }, 200
         except ValidationError as e:
             return {
                 'error': e.errors()
@@ -29,7 +37,6 @@ class RegisterResource(Resource):
             return {
                 'error': str(e)
             }, 500
-        
 
 class LoginResource(Resource):
     def post(self):
