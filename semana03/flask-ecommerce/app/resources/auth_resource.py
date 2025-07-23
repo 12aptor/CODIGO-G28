@@ -67,10 +67,10 @@ class LoginResource(Resource):
                 raise Exception('Correo o contraseña incorrectos')
             
             access_token = create_access_token(
-                identity=user.id
+                identity=f'{user.id}'
             )
             refresh_token = create_refresh_token(
-                identity=user.id
+                identity=f'{user.id}'
             )
             
             return {
