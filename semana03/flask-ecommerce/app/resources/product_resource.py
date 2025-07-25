@@ -7,6 +7,9 @@ import os
 import uuid
 from app.models.product_model import ProductModel
 from db import db
+from dotenv import load_dotenv
+
+load_dotenv()
 
 cloudinary.config(
     clod_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
