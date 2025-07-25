@@ -3,6 +3,7 @@ from pydantic import ValidationError
 from app.schemas.product_schema import CreateProductSchema
 import cloudinary
 import cloudinary.uploader
+import cloudinary.utils
 import os
 import uuid
 from app.models.product_model import ProductModel
@@ -20,7 +21,52 @@ cloudinary.config(
 
 class ProductResource(Resource):
     def get(self):
-        pass
+        try:
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 10, type=int)
+
+            products = ProductModel.query.filter_by(
+                status=True
+            ).paginate(
+                page=page,
+                per_page=per_page,
+                error_out=False
+            )
+
+            response = []
+            for product in products.items:
+                response.append({
+                    'id': product.id,
+                    'name': product.name,
+                    'code': product.code,
+                    'description': product.description,
+                    'image': cloudinary.utils.cloudinary_url(
+                        product.image,
+                        width=300,
+                        crop='scale',
+                        format='webp'
+                    )[0],
+                    'brand': product.brand,
+                    'size': product.size,
+                    'price': product.price,
+                    'stock': product.stock,
+                    'status': product.status,
+                    'category_id': product.category_id
+                })
+
+            return {
+                'data': response,
+                'pagination': {
+                    'page': products.page,
+                    'per_page': products.per_page,
+                    'total': products.total,
+                    'pages': products.pages
+                }
+            }, 200
+        except Exception as e:
+            return {
+                'error': str(e)
+            }, 500
 
     def post(self):
         try:
