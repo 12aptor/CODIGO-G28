@@ -7,6 +7,7 @@ import cloudinary.utils
 import os
 import uuid
 from app.models.product_model import ProductModel
+from app.models.update_product_log_model import UpdateProductLogModel
 from db import db
 from dotenv import load_dotenv
 
@@ -54,15 +55,16 @@ class ProductResource(Resource):
                     'category_id': product.category_id
                 })
 
-            return {
-                'data': response,
-                'pagination': {
-                    'page': products.page,
-                    'per_page': products.per_page,
-                    'total': products.total,
-                    'pages': products.pages
-                }
-            }, 200
+            return response, 200
+            # return {
+            #     'data': response,
+            #     'pagination': {
+            #         'page': products.page,
+            #         'per_page': products.per_page,
+            #         'total': products.total,
+            #         'pages': products.pages
+            #     }
+            # }, 200
         except Exception as e:
             return {
                 'error': str(e)
@@ -129,6 +131,39 @@ class ProductResource(Resource):
             return {
                 'error': e.errors()
             }, 400
+        except Exception as e:
+            return {
+                'error': str(e)
+            }, 500
+        
+
+class ProductByIdResource(Resource):
+    def put(self, product_id):
+        try:
+            product = ProductModel.query.get(product_id)
+            if not product:
+                raise Exception('Producto no encontrado')
+
+            data = request.form
+            validated_data = CreateProductSchema(**data)
+
+            image = request.files.get('image')
+            if image:
+                pass
+
+            product.name = validated_data.name
+            product.description = validated_data.description
+            product.brand = validated_data.brand
+            product.size = validated_data.size
+            product.price = validated_data.price
+            product.stock = validated_data.stock
+            product.category_id = validated_data.category_id
+
+            db.session.commit()
+
+            return {
+                'message': 'Producto actualizado correctamente'
+            }
         except Exception as e:
             return {
                 'error': str(e)
