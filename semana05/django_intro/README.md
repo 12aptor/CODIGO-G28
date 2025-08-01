@@ -57,3 +57,13 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py showmigrations
 ```
+
+## Variables de entorno
+
+```bash
+DB_NAME=''
+DB_USER=''
+DB_PASSWORD=''
+DB_HOST=''
+DB_PORT=5432
+```
