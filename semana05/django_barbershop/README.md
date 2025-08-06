@@ -19,10 +19,25 @@ pip install -r requirements.txt
 ```
 
 ## Variables de entorno
+
 ```bash
 DB_NAME=
 DB_USER=
 DB_PASSWORD=
 DB_HOST=
 DB_PORT=
+```
+
+## Ejecutar migraciones
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py showmigrations
+```
+
+## Iniciar el servidor
+
+```bash
+python manage.py runserver
 ```
