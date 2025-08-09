@@ -24,3 +24,30 @@ class BarberModel(models.Model):
 
     class Meta:
         db_table = 'barbers'
+
+class ScheduleModel(models.Model):
+    DAY_OF_WEEK = (
+        ('MONDAY', 'MONDAY'),
+        ('TUESDAY', 'TUESDAY'),
+        ('WEDNESDAY', 'WEDNESDAY'),
+        ('THURSDAY', 'THURSDAY'),
+        ('FRIDAY', 'FRIDAY'),
+        ('SATURDAY', 'SATURDAY'),
+        ('SUNDAY', 'SUNDAY'),
+    )
+
+    day_of_week = models.CharField(max_length=10, choices=DAY_OF_WEEK)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    barber = models.ForeignKey(
+        'BarberModel',
+        on_delete=models.CASCADE,
+        related_name='schedules',
+        db_column='barber_id'
+    )
+
+    def __str__(self):
+        return self.day_of_week
+    
+    class Meta:
+        db_table = 'schedules'

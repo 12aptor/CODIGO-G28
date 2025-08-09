@@ -29,9 +29,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Installed apps
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
+
+    # Apps
+    'authentication',
+    'services',
+    'transactions',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +142,5 @@ SPECTACULAR_SETTINGS = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+AUTH_USER_MODEL = 'authentication.UserModel'
