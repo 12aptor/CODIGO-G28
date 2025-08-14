@@ -11,6 +11,7 @@ from .serializers import (
 )
 from authentication.permissions import IsAdmin
 from django.http import Http404
+from datetime import time
 
 @extend_schema(
     methods=['GET'],
@@ -640,3 +641,61 @@ class ScheduleByIdView(generics.RetrieveUpdateDestroyAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+@extend_schema(
+    methods=['GET'],
+    tags=['Barbers'],
+    responses={
+        200: OpenApiResponse(
+            description='List of available barbers',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='List available barbers',
+                    value={
+                        'ok': True,
+                        'object': 'list_barbers_available',
+                        'data': [
+                            {
+                                'id': 1,
+                                'name': 'John Doe',
+                                'email': 'john@gmail.com',
+                                'phone': '987654321',
+                                'speciality': 'Barber',
+                                'status': True
+                            }
+                        ]
+                    }
+                )
+            ]
+        )
+    }
+)
+class BarberAvailableView(generics.ListAPIView):
+    queryset = BarberModel.objects.all()
+    serializer_class = BarberSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_queryset(self):
+        day = self.kwargs.get('day') # MONDAY, TUESDAY
+        start_time = self.kwargs.get('start_time') # 08:00
+        end_time = self.kwargs.get('end_time') # 12:00
+        print(day, start_time, end_time)
+
+        return self.queryset.filter(
+            schedules__day_of_week=day,
+            schedules__start_time__lte=time.fromisoformat(start_time),
+            schedules__end_time__gte=time.fromisoformat(end_time)
+        ).distinct()
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return Response(
+            data={
+                'ok': True,
+                'object': 'list_barbers_available',
+                'data': response.data
+            },
+            status=status.HTTP_200_OK
+        )
