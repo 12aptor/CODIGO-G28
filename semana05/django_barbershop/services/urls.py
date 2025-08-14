@@ -4,6 +4,8 @@ from .views import (
     ServiceByIdView,
     BarberView,
     BarberByIdView,
+    ScheduleView,
+    ScheduleByIdView,
 )
 
 urlpatterns = [
@@ -12,4 +14,7 @@ urlpatterns = [
 
     path('barbers/', BarberView.as_view()),
     path('barbers/<int:pk>/', BarberByIdView.as_view()),
+
+    path('schedules/', ScheduleView.as_view()),
+    path('schedules/<int:pk>/', ScheduleByIdView.as_view()),
 ]

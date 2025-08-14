@@ -193,7 +193,7 @@ class RoleByIdView(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data={
                     'ok': False,
-                    'object': 'retrieve_role',
+                    'object': 'update_role',
                     'error': 'Role not found'
                 },
                 status=status.HTTP_404_NOT_FOUND
@@ -214,7 +214,7 @@ class RoleByIdView(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data={
                     'ok': False,
-                    'object': 'retrieve_role',
+                    'object': 'delete_role',
                     'error': 'Role not found'
                 },
                 status=status.HTTP_404_NOT_FOUND

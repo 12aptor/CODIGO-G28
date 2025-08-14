@@ -4,7 +4,11 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from .models import ServiceModel, BarberModel, ScheduleModel
-from .serializers import ServiceSerializer, BarberSerializer
+from .serializers import (
+    ServiceSerializer,
+    BarberSerializer,
+    ScheduleSerializer
+)
 from authentication.permissions import IsAdmin
 from django.http import Http404
 
@@ -182,7 +186,7 @@ class ServiceByIdView(generics.RetrieveUpdateAPIView):
             return Response(
                 data={
                     'ok': False,
-                    'object': 'retrieve_service',
+                    'object': 'update_service',
                     'error': 'Service not found'
                 },
                 status=status.HTTP_404_NOT_FOUND
@@ -386,7 +390,7 @@ class BarberByIdView(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data={
                     'ok': False,
-                    'object': 'retrieve_barber',
+                    'object': 'update_barber',
                     'error': 'Barber not found'
                 },
                 status=status.HTTP_404_NOT_FOUND
@@ -410,14 +414,229 @@ class BarberByIdView(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data={
                     'ok': False,
-                    'object': 'retrieve_barber',
+                    'object': 'delete_barber',
                     'error': 'Barber not found'
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
         
-class ScheduleView(generics.ListCreateAPIView):
-    pass
 
+@extend_schema(
+    methods=['GET'],
+    tags=['Schedules'],
+    responses={
+        200: OpenApiResponse(
+            description='List of schedules',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='List schedules',
+                    value={
+                        'ok': True,
+                        'object': 'list_schedules',
+                        'data': [
+                            {
+                                'day_of_week': 'MONDAY',
+                                'start_time': '08:00',
+                                'end_time': '12:00',
+                                'barber': 1,
+                            }
+                        ]
+                    }
+                )
+            ]
+        )
+    }
+)
+@extend_schema(
+    methods=['POST'],
+    tags=['Schedules'],
+    responses={
+        200: OpenApiResponse(
+            description='Schedule created',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='Schedule created',
+                    value={
+                        'ok': True,
+                        'object': 'create_schedule',
+                        'data': {
+                            'day_of_week': 'MONDAY',
+                            'start_time': '08:00',
+                            'end_time': '12:00',
+                            'barber': 1,
+                        }
+                    }
+                )
+            ]
+        )
+    }
+)
+class ScheduleView(generics.ListCreateAPIView):
+    queryset = ScheduleModel.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return Response(
+            data={
+                'ok': True,
+                'object': 'list_schedules',
+                'data': response.data
+            },
+            status=status.HTTP_200_OK
+        )
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response(
+            data={
+                'ok': True,
+                'object': 'create_schedule',
+                'data': response.data
+            },
+            status=status.HTTP_200_OK
+        )
+
+@extend_schema(
+    methods=['GET'],
+    tags=['Schedules'],
+    responses={
+        200: OpenApiResponse(
+            description='Schedule by id',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='Schedule by id',
+                    value={
+                        'ok': True,
+                        'object': 'retrieve_schedule',
+                        'data': {
+                            'id': 1,
+                            'day_of_week': 'MONDAY',
+                            'start_time': '08:00',
+                            'end_time': '12:00',
+                            'barber': 1,
+                        }
+                    }
+                )
+            ]
+        )
+    }
+)
+@extend_schema(
+    methods=['PUT', 'PATCH'],
+    tags=['Schedules'],
+    responses={
+        200: OpenApiResponse(
+            description='Schedule updated',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='Schedule updated',
+                    value={
+                        'ok': True,
+                        'object': 'update_schedule',
+                        'data': {
+                            'id': 1,
+                            'day_of_week': 'MONDAY',
+                            'start_time': '08:00',
+                            'end_time': '12:00',
+                            'barber': 1,
+                        }
+                    }
+                )
+            ]
+        )
+    }
+)
+@extend_schema(
+    methods=['DELETE'],
+    tags=['Schedules'],
+    responses={
+        200: OpenApiResponse(
+            description='Schedule deleted',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='Schedule deleted',
+                    value={
+                        'ok': True,
+                        'object': 'delete_schedule',
+                        'data': None
+                    }
+                )
+            ]
+        )
+    }
+)
 class ScheduleByIdView(generics.RetrieveUpdateDestroyAPIView):
-    pass
+    queryset = ScheduleModel.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            response = super().retrieve(request, *args, **kwargs)
+            return Response(
+                data={
+                    'ok': True,
+                    'object': 'retrieve_schedule',
+                    'data': response.data
+                },
+                status=status.HTTP_200_OK
+            )
+        except Http404:
+            return Response(
+                data={
+                    'ok': False,
+                    'object': 'retrieve_schedule',
+                    'error': 'Schedule not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    def update(self, request, *args, **kwargs):
+        try:
+            response = super().update(request, *args, **kwargs)
+            return Response(
+                data={
+                    'ok': True,
+                    'object': 'update_schedule',
+                    'data': response.data
+                },
+                status=status.HTTP_200_OK
+            )
+        except Http404:
+            return Response(
+                data={
+                    'ok': False,
+                    'object': 'update_schedule',
+                    'error': 'Schedule not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            super().destroy(request, *args, **kwargs)
+            return Response(
+                data={
+                    'ok': True,
+                    'object': 'delete_schedule',
+                    'data': None
+                },
+                status=status.HTTP_200_OK
+            )
+        except Http404:
+            return Response(
+                data={
+                    'ok': False,
+                    'object': 'delete_schedule',
+                    'error': 'Schedule not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
