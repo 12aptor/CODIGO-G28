@@ -156,3 +156,6 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
+
+NUBEFACT_API_URL = os.getenv('NUBEFACT_API_URL')
+NUBEFACT_API_KEY = os.getenv('NUBEFACT_API_KEY')

@@ -14,4 +14,5 @@ urlpatterns = [
 
     path('api/', include('authentication.urls')),
     path('api/', include('services.urls')),
+    path('api/', include('transactions.urls')),
 ]
