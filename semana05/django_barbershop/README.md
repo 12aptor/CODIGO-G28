@@ -47,7 +47,7 @@ python manage.py runserver
 ## Instalar dependencias
 
 ```bash
-pip install pytest pytest-django pytest-cov
+pip install pytest pytest-django pytest-cov Faker
 ```
 
 ## Configuración `pytest.ini`
