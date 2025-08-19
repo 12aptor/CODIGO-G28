@@ -65,8 +65,30 @@ class AppointmentView(generics.CreateAPIView):
             },
             status=status.HTTP_200_OK
         )
-    
+
+@extend_schema(
+    methods=['POST'],
+    tags=['Appointments'],
+    responses={
+        200: OpenApiResponse(
+            description='Appointment paid',
+            response=OpenApiTypes.OBJECT,
+            examples=[
+                OpenApiExample(
+                    name='Appointment paid',
+                    value={
+                        'ok': True,
+                        'object': 'create_appointment_payment',
+                        'data': None
+                    }
+                )
+            ]
+        )
+    }
+)
 class AppointmentPaymentView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
+
     def post(self, request, *args, **kwargs):
         try:
             appointment_id = kwargs.get('appointment_id')
@@ -160,11 +182,11 @@ class AppointmentPaymentView(APIView):
                 appointment=appointment
             )
             payment.save()
-
+            print(response_json)
             return Response(
                 data={
                     'ok': True,
-                    'object': 'create_payment',
+                    'object': 'create_appointment_payment',
                     'data': response_json
                 },
                 status=status.HTTP_200_OK
@@ -173,7 +195,7 @@ class AppointmentPaymentView(APIView):
             return Response(
                 data={
                     'ok': False,
-                    'object': 'create_payment',
+                    'object': 'create_appointment_payment',
                     'error': 'Payment not created'
                 },
                 status=status.HTTP_400_BAD_REQUEST
