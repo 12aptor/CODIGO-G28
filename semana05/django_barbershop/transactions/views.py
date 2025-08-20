@@ -174,7 +174,7 @@ class AppointmentPaymentView(APIView):
             response_status = response.status_code
 
             if response_status != 200:
-                raise Exception(response_json.get('error'))
+                raise Exception(response_json.get('errors'))
             
             payment = PaymentModel.objects.create(
                 amount=appointment.service.price,
@@ -191,12 +191,12 @@ class AppointmentPaymentView(APIView):
                 },
                 status=status.HTTP_200_OK
             )
-        except:
+        except Exception as e:
             return Response(
                 data={
                     'ok': False,
                     'object': 'create_appointment_payment',
-                    'error': 'Payment not created'
+                    'error': str(e)
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )

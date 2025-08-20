@@ -26,6 +26,8 @@ DB_USER=
 DB_PASSWORD=
 DB_HOST=
 DB_PORT=
+NUBEFACT_API_URL=
+NUBEFACT_API_KEY=
 ```
 
 ## Ejecutar migraciones
