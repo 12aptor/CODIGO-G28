@@ -1,0 +1,19 @@
+{
+  "name": "express_intro",
+  "version": "1.0.0",
+  "description": "```bash\r mkdir express_intro\r cd express_intro\r npm init -y\r ```",
+  "main": "main.js",
+  "scripts": {
+    "dev": "nodemon main.js",
+    "start": "node main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10"
+  }
+}
