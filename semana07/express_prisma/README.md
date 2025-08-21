@@ -75,3 +75,11 @@ npx tsc --init
 ```bash
 npx prisma init
 ```
+
+## Migraciones
+
+```bash
+npx prisma migrate dev
+# ó
+npx prisma migrate dev --name create_tables
+```

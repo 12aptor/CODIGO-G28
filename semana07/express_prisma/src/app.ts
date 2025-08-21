@@ -8,7 +8,7 @@ const main = () => {
   app.get("/", (req, res) => {
     res.send("Bienvenidos a mi API 🤠😎");
   });
-  app.use("/api/user", userRouter);
+  app.use("/api/users", userRouter);
 
   app.listen(PORT);
   console.log(`Server is running on: http://localhost:${PORT}`);
