@@ -5,6 +5,8 @@ const main = () => {
   const app = express();
   const PORT = +process.env.PORT! || 3000;
 
+  app.use(express.json());
+
   app.get("/", (req, res) => {
     res.send("Bienvenidos a mi API 🤠😎");
   });
