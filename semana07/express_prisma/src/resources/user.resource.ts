@@ -170,3 +170,33 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
   }
 };
+
+export const getProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: +userId!,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({
+      ok: true,
+      object: "get_user",
+      data: user,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({
+        ok: false,
+        object: "get_user",
+        error: error.message,
+      });
+    }
+  }
+};
