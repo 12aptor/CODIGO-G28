@@ -3,27 +3,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { connectToMongo } from "./config/mongodb";
+import { authRouter } from "./routes/auth.router";
 
 const main = () => {
   const app = express();
   const PORT = +process.env.PORT! || 8000;
 
-  app.get("/", (req, res) => {
-    res.send("Welcome to the Express server! 😎");
-  });
+  app.use(express.json());
 
-  app.get("/customers", async (req, res) => {
-    const db = await connectToMongo();
-    const collection = db.collection("customers");
-    const customers = await collection.find().toArray();
-
-    res.json({
-      ok: true,
-      object: "customers_list",
-      data: customers
-    });
-  });
+  app.use("/api/auth", authRouter);
 
   app.listen(PORT);
   console.log(`Server is running on: http://localhost:${PORT}`);
