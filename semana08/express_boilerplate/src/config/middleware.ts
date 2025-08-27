@@ -1,5 +1,19 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string;
+    }
+  }
+}
+
+interface CustomJwtPayload extends JwtPayload {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export const authMiddleware = (
   req: Request,
@@ -22,7 +36,7 @@ export const authMiddleware = (
       throw new Error("Missing secret key");
     }
 
-    const decodedToken = jwt.verify(token, secretKey);
+    const decodedToken = jwt.verify(token, secretKey) as CustomJwtPayload;
     if (!decodedToken.id) {
       throw new Error("unauthorized");
     }
