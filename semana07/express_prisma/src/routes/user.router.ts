@@ -7,3 +7,4 @@ userRouter.get("/", userResource.listUsers);
 userRouter.post("/", userResource.createUser);
 userRouter.put("/:userId", userResource.updateUser);
 userRouter.delete("/:userId", userResource.deleteUser);
+userRouter.get("/profile", userResource.getProfile);

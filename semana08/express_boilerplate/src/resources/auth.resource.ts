@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { loginSchema, registerSchema } from "../schemas/auth.schema";
 import { ZodError } from "zod";
-import { connectToMongo } from "../config/mongodb";
+import { connectDB } from "../config/mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -9,7 +9,7 @@ export const register = async (req: Request, res: Response) => {
   try {
     const data = await registerSchema.parseAsync(req.body);
 
-    const db = await connectToMongo();
+    const db = await connectDB();
     const collection = db.collection("users");
 
     const existingUser = await collection.findOne({
@@ -59,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const data = await loginSchema.parseAsync(req.body);
 
-    const db = await connectToMongo();
+    const db = await connectDB();
     const collection = db.collection("users");
 
     const user = await collection.findOne({
@@ -100,17 +100,18 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
+    console.log(error);
     if (error instanceof ZodError) {
       res.status(400).json({
         ok: false,
-        object: "register",
+        object: "login",
         error: error.issues,
       });
       return;
     } else if (error instanceof Error) {
       res.status(400).json({
         ok: false,
-        object: "register",
+        object: "login",
         error: error.message,
       });
       return;

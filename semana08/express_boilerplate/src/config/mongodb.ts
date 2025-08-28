@@ -1,12 +1,19 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, Db } from "mongodb";
 
-export const connectToMongo = async () => {
-  const uri = process.env.MONGODB_URI;
-  console.log("MONGODB_URI:", uri);
-  if (!uri) {
-    throw new Error("MONGODB_URI is not defined in environment variables");
+let db: Db;
+
+export const connectDB = async () => {
+  if (db) {
+    return db;
   }
+
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error("MONGODB_URI is not defined");
+  }
+
   const client = new MongoClient(uri);
-  const db = client.db("ecommerce");
+  await client.connect();
+  db = client.db();
   return db;
 };

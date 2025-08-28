@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express Boilerplate Sockets</title>
+  </head>
+  <body>
+    <h1>Chat en tiempo real</h1>
+
+    <ul id="messagesList"></ul>
+    <input type="text" placeholder="Escribir..." id="inputMessage" />
+    <button type="button" id="sendButton">Enviar mensaje</button>
+
+    <script type="module">
+      import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+
+      const socket = io("http://localhost:8000");
+
+      socket.on("message", (data) => {
+        const messagesList = document.getElementById("messagesList");
+        const li = document.createElement("li");
+        li.innerText = `${data.author.name}: ${data.content}`;
+        messagesList.appendChild(li);
+      });
+
+      const sendButton = document.getElementById("sendButton");
+      const inputMessage = document.getElementById("inputMessage");
+
+      sendButton.addEventListener("click", () => {
+        socket.emit("message", {
+          content: inputMessage.value,
+          channel_id: "68ae77c6438ada56c7aae9a2",
+          author_id: "68afa711b4fd7a2e9e93d38c",
+        });
+      });
+    </script>
+  </body>
+</html>

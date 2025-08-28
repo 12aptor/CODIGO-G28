@@ -20,7 +20,7 @@ show dbs
 
 ## Crear o conecta a una base de datos
 
-```bash
+```javascript
 db.createCollection("nombre_de_la_coleccion")
 # ó
 db.nombre_de_la_coleccion.insertOne({key: "value"})
