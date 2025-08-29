@@ -14,7 +14,17 @@ export const initSocket = (server: HttpServer): Server => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("message", async (data) => {
+    socket.on("join", (channel_id: string) => {
+      socket.join(channel_id);
+    });
+
+    type Message = {
+      content: string;
+      channel_id: string;
+      author_id: string;
+    };
+
+    socket.on("message", async (data: Message) => {
       try {
         const db = await connectDB();
         const collection = db.collection("messages");
@@ -43,7 +53,7 @@ export const initSocket = (server: HttpServer): Server => {
           _id: message.insertedId,
         });
 
-        io.emit("message", createdMessage);
+        io.to(data.channel_id).emit("message", createdMessage);
       } catch (error) {
         console.log("Error handling message", error);
       }
@@ -52,3 +62,5 @@ export const initSocket = (server: HttpServer): Server => {
 
   return io;
 };
+
+export { io };

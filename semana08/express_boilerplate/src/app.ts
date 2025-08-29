@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import morgan from "morgan";
+import cors from "cors";
 import { createServer } from "http";
 
 dotenv.config();
@@ -18,6 +20,8 @@ const main = () => {
   initSocket(server);
 
   app.use(express.json());
+  app.use(cors());
+  app.use(morgan("dev"));
 
   app.use("/api/auth", authRouter);
   app.use("/api/channels", authMiddleware, channelRouter);
